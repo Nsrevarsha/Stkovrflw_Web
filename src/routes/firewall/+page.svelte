@@ -1,87 +1,64 @@
 <script>
-	let items = [
-		{
-			userid: '1001',
-			name: 'Sanjana',
-			sourceIpPort: '192.168.1.100:42261',
-			destIpPort: '172.16.0.23:43364',
-			policy: 'Accept'
-		},
-		{
-			userid: '1002',
-			name: 'Avinash',
-			sourceIpPort: '10.10.10.10:80789',
-			destIpPort: '192.168.0.1:44312',
-			policy: 'Deny'
-		},
-		{
-			userid: '1003',
-			name: 'Bhavana',
-			sourceIpPort: '172.17.17.17:22050',
-			destIpPort: '10.10.10.20:22201',
-			policy: 'Accept'
-		},
-		{
-			userid: '1004',
-			name: 'Esha',
-			sourceIpPort: '172.17.17.30:53878',
-			destIpPort: '10.10.10.40:53771',
-			policy: 'Deny'
-		},
-		{
-			userid: '1005',
-			name: 'Dinesh',
-			sourceIpPort: '10.10.10.30:11034',
-			destIpPort: '192.168.0.30:11092',
-			policy: 'Accept'
-		},
-		{
-			userid: '1006',
-			name: 'Rahul',
-			sourceIpPort: '10.10.10.40:11034',
-			destIpPort: '192.168.0.30:11092',
-			policy: 'Accept'
-		}
-        
-	];
-    
+	import { getDrawerStore } from '@skeletonlabs/skeleton';
+	import RightDrawer from '../components/RightDrawer.svelte';
+	const drawerStore = getDrawerStore();
 
+	export let data;
+
+	const rightOpen = () => {
+		const drawerSettings = {
+			// Property Overrides
+			position: 'right',
+
+			width: 'w-[280px] md:w-[480px] wl-24 ',
+			padding: 'p-4',
+			rounded: 'rounded-xl',
+			meta: { content: RightDrawer }
+		};
+		drawerStore.open(drawerSettings);
+	};
 </script>
 
-<div class="table-container text-token">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>User id</th>
-                <th>Source IP</th>
-                <th>Destination IP</th>
-                <th>Policy</th>
-                <th>Name</th>
-                <th>Name</th>
-                <th>Name</th>
-                <th>Name</th>
-                <th>Name</th>
-                <th>name</th>
-            </tr>
-        </thead>
-        <tbody>
-            {#each items as row}
-                <tr>
-                    <td>{row.name}</td>
-                    <td>{row.userid}</td>
-                    <td>{row.sourceIpPort}</td>
-                    <td>{row.destIpPort}</td>
-                    <td><span class={"badge variant-filled"}>{row.policy}</span></td>
-                    <td>{row.name}</td>
-                    <td>{row.name}</td>
-                    <td>{row.name}</td>
-                    <td>{row.name}</td>
-                    <td>{row.name}</td>
-                    <td><span class="badge variant-soft-primary">{row.atomicNumber}</span></td>
-                </tr>
-            {/each}
-        </tbody>
-        
-    </table>
+<div class="text-token table-container">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Protocol</th>
+				<th>Source</th>
+				<th>Source Port</th>
+				<th>Destination</th>
+				<th>Destination Port</th>
+				<th>Action</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each data.data as row}
+				<form action="/firewall?edit" class="hidden">
+					<input type="text" name="id" value={row.id} />
+					<input type="text" name="name" value={row.name} />
+					<input type="text" name="protocol" value={row.protocol} />
+					<input type="text" name="source" value={row.source} />
+					<input type="text" name="source" value={row.source_port} />
+					<input type="text" name="destination" value={row.destination} />
+					<input type="text" name="destination" value={row.destination_port} />
+				</form>
+				<tr>
+					<td>{row.name}</td>
+					<td>{row.protocol}</td>
+					<td>{row.source}</td>
+					<td>{row.source_port}</td>
+					<td>{row.destination}</td>
+					<td>{row.destination_port}</td>
+					<td><span class={'variant-filled badge'}>{row.action}</span></td>
+					<button class="variant-ghost-primary btn mr-2 w-20 rounded-xl p-3" on:click={rightOpen}
+						>Edit</button
+					>
+					<button class="variant-ghost-secondary btn rounded-xl">Delete</button>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
 </div>

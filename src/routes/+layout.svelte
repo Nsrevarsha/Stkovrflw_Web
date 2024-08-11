@@ -6,26 +6,30 @@
 	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 	import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 	// import Drawer from './Drawer.svelte';
-
+	import LeftDrawer from './components/LeftDrawer.svelte';
 	import '../app.css';
 	// initializeStore();
 	initializeStores();
 	const drawerStore = getDrawerStore();
 	let valueSingle = 'books';
-	const triggerOpen = () => {
+	const leftOpen = () => {
 		const drawerSettings = {
 			// Property Overrides
 			position: 'left',
 
 			width: 'w-[280px] md:w-[480px] wl-24 ',
 			padding: 'p-4',
-			rounded: 'rounded-xl'
+			rounded: 'rounded-xl',
+			meta: {content: LeftDrawer}
 		};
 		drawerStore.open(drawerSettings);
 	};
-	const triggerClose = () => {
+	const leftClose = () => {
 		drawerStore.close();
 	};
+
+	
+	
 </script>
 
 <div>
@@ -42,7 +46,7 @@
 	
 		<AppRail class="grid-flow-col">
 			<AppRailAnchor>
-				<button class="btn col-span-2" on:click={() => triggerOpen()}>
+				<button class="btn col-span-2" on:click={() => leftOpen()}>
 					<span style="color: black ">
 						<i class="fa-solid fa-bars"> </i>
 					</span>
@@ -70,6 +74,11 @@
 			</svelte:fragment>
 				<span class="">Hosts</span>
 			</AppRailAnchor>
+			<AppRailAnchor href="/virtualServers" title="VirtualServers">
+				<span>
+					VirtualServers
+				</span>
+			</AppRailAnchor>
 	
 			<svelte:fragment slot="trail">
 				<AppRailAnchor href="#" target="_blank" title="ChatBot">
@@ -86,32 +95,10 @@
 		
 	</div>	
 		<Drawer>
-			<div>
-				 <ListBox>
-					<a href="/" on:click={()=>triggerClose()}>
-					<ListBoxItem bind:group={valueSingle} value="Home">
-					 Home
-					</ListBoxItem>
-					</a>
-					<a href="/firewall" on:click={() => triggerClose()}>
-						<ListBoxItem bind:group={valueSingle} name="medium" value="Firewall">
-							Firewall
-						</ListBoxItem>
-					</a>
-					
-	
-					<a href="/hosts" on:click={() => triggerClose()}>
-						<ListBoxItem bind:group={valueSingle} name="medium" value="host">Hosts</ListBoxItem>
-					</a>
-						 
-					<a href="/access" on:click={() => triggerClose()}>
-						<ListBoxItem bind:group={valueSingle} name="medium" value="access">Access</ListBoxItem>
-					</a>
-				</ListBox>
-			</div>
+			<svelte:component this={$drawerStore.meta.content}></svelte:component>
 		</Drawer>
 		
+	
+	
 	</div>
-	
-	
 	</div>
